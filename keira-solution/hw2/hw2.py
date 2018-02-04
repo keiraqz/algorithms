@@ -4,13 +4,13 @@ class CountComparison:
 		self.pivot_index = pivot_index 
 
 	def _find_median(self, input_array, beg_index, end_index):
-		middle_index = (end_index - beg_index) // 2
+		middle_index = beg_index + (end_index - beg_index) // 2
 		beg_element = input_array[beg_index]
 		middle_element = input_array[middle_index]
 		last_element = input_array[end_index]
 		if (beg_element < middle_element < last_element or
 			beg_element > middle_element > last_element ):
-			self._swap(input_array, beg_index, middle_element)
+			self._swap(input_array, beg_index, middle_index)
 		elif (middle_element < last_element < beg_element or
 			middle_element > last_element > beg_element):
 			self._swap(input_array, beg_index, end_index)
@@ -49,7 +49,7 @@ class CountComparison:
 if __name__ == "__main__":
 	### Test 1
 	input_array = [2,4,6,1,7,8]
-	sorting = CountComparison()
+	sorting = CountComparison(pivot_index="MEDIAN")
 	sorting.quick_sort(input_array, 0, len(input_array)-1)
 	print(input_array)
 	print(sorting.ComparisonCount)
@@ -72,5 +72,5 @@ if __name__ == "__main__":
 	# Q3
 	sorting = CountComparison(pivot_index="MEDIAN")
 	test3 = numList[:]
-	sorting.quick_sort(test3, 0, len(test3)-1)
+	sorting.quick_sort(test3, 0, len(numList)-1)
 	print("==> homework solution is 138382, test result is: %d" % sorting.ComparisonCount)
