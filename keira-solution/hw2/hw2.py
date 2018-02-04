@@ -3,51 +3,41 @@ class CountComparison:
 		self.ComparisonCount = 0
 		self.pivot_index = pivot_index 
 
-	def quick_sort(self, input_array):
-		print(input_array)
-		if (len(input_array) == 2):
-			if (input_array[1] > input_array[0]):
-				tmp = input_array[0]
-				input_array[0] = input_array[1]
-				input_array[1] = tmp
-		else:
-			div_index = 1
-			pivot = input_array[self.pivot_index]
-			for i in range(1, len(input_array)):
-				if (input_array[i] < pivot): 
-					# swap the element with the left most element from the right array
-					tmp = input_array[div_index]
-					input_array[div_index] = input_array[i]
-					input_array[i] = tmp
-					# increment the divide index
-					div_index += 1
-			# else:
-				# do nothing
+	def _swap(self, input_array, swap1, swap2):
+		tmp = input_array[swap1]
+		input_array[swap1] = input_array[swap2]
+		input_array[swap2] = tmp
 
-			# swap pivot with the right most element of the left array
-			tmp = input_array[div_index-1]
-			input_array[div_index-1] = input_array[self.pivot_index]
-			input_array[self.pivot_index] = tmp
-			# get subarrays
-			left_array = input_array[:div_index]
-			right_array = input_array[div_index:]
-
-			# recurse 
-			if (len(left_array) > 1):
-				self.ComparisonCount += len(left_array) - 1
-				self.quick_sort(left_array)
-			if (len(right_array) > 1):
-				self.ComparisonCount += len(right_array) - 1
-				self.quick_sort(right_array)
+	def quick_sort(self, input_array, beg_index, end_index):
+		self.ComparisonCount += end_index - beg_index 
+		div_index = beg_index + 1
+		pivot = input_array[beg_index]
+		for i in range(beg_index, end_index+1):
+			if (input_array[i] < pivot): 
+				# swap the element with the left most element from the right array
+				self._swap(input_array, div_index, i)
+				# increment the divide index
+				div_index += 1
+		# else:
+			# do nothing
+		# swap pivot with the right most element of the left array
+		self._swap(input_array, beg_index, div_index-1)
+		# get subarrays and recurse 
+		# left_array = input_array[:div_index]
+		# right_array = input_array[div_index:]
+		if (div_index - beg_index > 1):
+			self.quick_sort(input_array, beg_index, div_index-1)
+		if (end_index - div_index > 0):
+			self.quick_sort(input_array, div_index, end_index)
 
 
 if __name__ == "__main__":
 	### Test 1
-	# input_array = [2,4,6,1,7,8]
-	# sorting = CountComparison()
-	# sorting.quick_sort(input_array)
-	# print(input_array)
-	# print(sorting.ComparisonCount)
+	input_array = [2,4,6,1,7,8]
+	sorting = CountComparison()
+	sorting.quick_sort(input_array, 0, len(input_array)-1)
+	print(input_array)
+	print(sorting.ComparisonCount)
 
 	## Homework
 	NUMLIST_FILENAME = "QuickSort.txt"
@@ -55,6 +45,5 @@ if __name__ == "__main__":
 	with inFile as f:
 		numList = [int(integers.strip()) for integers in f.readlines()]
 	sorting = CountComparison()
-	sorting.quick_sort(numList)
+	sorting.quick_sort(numList, 0, len(numList)-1)
 	print("==> homework solution is 162085, test result is: %d" % sorting.ComparisonCount)
-
